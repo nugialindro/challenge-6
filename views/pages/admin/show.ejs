@@ -1,0 +1,23 @@
+<div class="cardous">
+  <button type="button" onclick="history.back()" class="btn btn-light">
+    <i class="bi-arrow-left"></i>
+    Kembali
+  </button>
+
+  <h3 class="my-3"><%= pageTitle %></h3>
+
+  <div class="table-responsive mt-3">
+    <table class="table table-bordered">
+      <tbody>
+        <tr>
+          <th scope="row">Username</th>
+          <td><%- UserGame.username %></td>
+        </tr>
+        <tr>
+          <th scope="row">Email</th>
+          <td><%- UserGame.email %></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
