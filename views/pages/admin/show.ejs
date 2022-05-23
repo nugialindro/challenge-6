@@ -1,21 +1,33 @@
-<div class="cardous">
+<div class="dtl-user">
   <button type="button" onclick="history.back()" class="btn btn-light">
     <i class="bi-arrow-left"></i>
     Kembali
   </button>
 
-  <h3 class="my-3"><%= pageTitle %></h3>
+  <h3 class="my-3">Detail User</h3>
 
   <div class="table-responsive mt-3">
-    <table class="table table-bordered">
+    <table class="table">
       <tbody>
         <tr>
           <th scope="row">Username</th>
-          <td><%- UserGame.username %></td>
+          <td><%= detail.username %></td>
         </tr>
         <tr>
           <th scope="row">Email</th>
-          <td><%- UserGame.email %></td>
+          <td><%= detail.email %></td>
+        </tr>
+        <tr>
+          <th scope="row">First Name</th>
+          <td><%= detail.UserGameBiodata.firstName %></td>
+        </tr>
+        <tr>
+          <th scope="row">Last Name</th>
+          <td><%= detail.UserGameBiodata.lastName %></td>
+        </tr>
+        <tr>
+          <th scope="row">Phone Number</th>
+          <td><%= detail.UserGameBiodata.phoneNumber %></td>
         </tr>
       </tbody>
     </table>
