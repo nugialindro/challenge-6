@@ -1,23 +1,29 @@
 const express = require("express");
-const { UserGame, UserGameBiodata } = require("../models");
+const { UserGame, UserGameBiodata, UserGameHistory } = require("../models");
 const dummyAdmin = [];
 
 const router = express.Router();
 
-router.get("/", async (req, res) => {
-  const abc = await UserGame.findAll();
-  const jumlahUser = abc.length;
+router.get("/", (req, res) => {
+  res.render("pages/login/login", { layout: "layouts/login" });
+});
 
-  res.render("pages/home/index", { jumlahUser });
+router.get("/admin", async (req, res) => {
+  const userdata = await UserGame.findAll();
+  const jumlahUser = userdata.length;
+  const leaderboard = await UserGameHistory.findAll({
+    order: [["score", "desc"]],
+  });
+  res.render("pages/home/index", { jumlahUser, leaderboard });
 });
 
 router.get("/admin/create", (req, res) => {
   res.render("pages/admin/create");
 });
 
-router.get("/admin", (req, res) => {
+router.get("/admin/user", (req, res) => {
   UserGame.findAll({
-    order: [["username", "ASC"]],
+    order: [["id", "ASC"]],
   }).then((usergames) => {
     res.render("pages/admin/index", {
       pageTitle: "Daftar User",
@@ -80,7 +86,6 @@ router.put("/admin/edit/:id", async (req, res) => {
   res.redirect("/");
 });
 
-// add Data
 router.post("/admin/create", async (req, res) => {
   const userGame = await UserGame.create({
     username: req.body.username,
@@ -93,17 +98,23 @@ router.post("/admin/create", async (req, res) => {
     lastName: req.body.lastName,
     phoneNumber: req.body.phoneNumber,
   });
-  res.redirect("/");
+  res.redirect("/admin");
 });
 
-router.delete("/admin/:id", (req, res) => {
-  UserGame.destroy({
+router.delete("/admin/:id", async (req, res) => {
+  const { id } = req.params;
+  await UserGameBiodata.destroy({
     where: {
-      id: req.params.id,
+      userGameId: id,
     },
-  }).then(() => {
-    res.redirect("/");
   });
+
+  await UserGame.destroy({
+    where: {
+      id: id,
+    },
+  });
+  res.redirect("/admin");
 });
 
 // LOGIN
@@ -120,7 +131,7 @@ router.post("/login", (req, res) => {
   });
   console.log(dummyAdmin);
   if (email === "admin@admin.com" && password === "admin") {
-    res.redirect("/");
+    res.redirect("/admin/");
   } else {
     res.redirect("/");
   }
